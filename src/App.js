@@ -1,13 +1,22 @@
-import './App.css';
+//contexts
 import {AuthProvider} from "./context/AuthContext"
-import WardrobeUpload from "./components/WardrobeUpload"
+
+//pages
+import Home from "./pages/Home"
+import Shop from "./pages/Shop"
+
+//routers
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
 function App() {
   return (
     <AuthProvider>
-        <div className="App">
-        <WardrobeUpload />
-        </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/shop" element={<Shop/>} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

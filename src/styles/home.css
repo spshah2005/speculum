@@ -1,0 +1,35 @@
+.hero {
+    display: flex;
+    flex-direction: column;
+    height: 140vh;
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    text-align: center; /* Center the title and main description */
+    position: relative; /* Make positioning relative for the peek description */
+}
+
+.hero-title, .hero-description, .peek-description {
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
+}
+
+.hero-title {
+    top: 25%; /* Position at 1/4 height of the hero component */
+    font-size: 4rem; /* Adjust font size as needed */
+    margin: 0; /* Remove default margin */
+    margin-top: 200px;
+}
+
+.hero-description {
+    font-size: 1.5rem; /* Adjust font size as needed */
+    margin-top: 1rem; /* Space between title and description */
+}
+
+.peek-description {
+    position: absolute; /* Position it relative to the hero */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    font-size: 1rem; /* Adjust font size as needed */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
+}
