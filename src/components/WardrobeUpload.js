@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import { useAuth } from "../context/AuthContext";
 // import axios from 'axios'
 //gemini api
 import { GoogleGenerativeAI } from "@google/generative-ai"
@@ -11,7 +12,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 function WardrobeUpload() {
   const [image, setImage] = useState(null);
   const storage = getStorage();
-  const currentUser = 'WGfWft8RyseJnCBYYAsGHWiBGiS2' //will change on authentication
+  const {currentUser} = useAuth();
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
