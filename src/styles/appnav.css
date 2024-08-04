@@ -1,0 +1,65 @@
+/* logos and icons */
+.navbar-logo {
+    width: 50px; /* Set the desired width */
+    height: 50px;
+    object-fit: cover;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+  }
+  
+  .navbar-logo:hover {
+    transform: scale(1.1); /* Slightly increase size */
+    opacity: 0.8; /* Reduce opacity */
+  }
+  
+  .closet-icon {
+    width: 80px;
+    height: 55px;
+    object-fit: cover;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+  }
+  /*text*/
+  .nav-text {
+    color: white;
+  }
+
+  .nav-text:hover {
+    color: white;
+    transform: scale(1.1); /* Slightly increase size */
+    opacity: 0.8; /* Reduce opacity */
+  }
+
+  .navbar-nav .nav-link.active {
+    color: white; /* Color for active nav links */
+    border-bottom: 1px solid white;
+  }
+
+
+  /*search*/
+  .custom-search-input {
+    width: 800px; /* Set the desired width */
+    height: 50px; /* Set the desired height */
+    font-size: 16px; /* Adjust font size for larger input */
+    margin-right: 8px;
+    padding: 8px 12px; /* Adjust padding for better appearance */
+  }
+
+  .custom-search-input:hover {
+    opacity: 0.8;
+  }
+
+  /* App.css */
+    .btn-outline-white {
+        color: black;
+        background-color: white;
+        border-color: white;
+    }
+  
+    .btn-outline-white:hover {
+        color: white;
+        background-color: black;
+        border-color: white;
+    }
+  
+
+
+  
