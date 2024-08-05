@@ -33,7 +33,7 @@ export default function AppNav() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto d-flex align-items-center">
-                    <Nav.Link href="/wardrobe-upload" className="nav-text">
+                    <Nav.Link href="/my-wardrobe" className="nav-text">
                         <img
                             src={closet}
                             alt="Closet Icon"
@@ -45,7 +45,7 @@ export default function AppNav() {
                         <InputGroup className="custom-search-input">
                         <FormControl
                             type="search"
-                            placeholder="search speculum"
+                            placeholder="mirror, mirror on the wall..."
                             aria-label="Search"
                         />
                         <Button className="btn-outline-white">
