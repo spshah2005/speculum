@@ -11,7 +11,6 @@ import Wardrobe from "./pages/Wardrobe"
 //components
 import AppNav from "./components/AppNav"
 import WardrobeUpload from "./components/WardrobeUpload"
-
 //routers
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
