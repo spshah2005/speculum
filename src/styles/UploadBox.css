@@ -1,0 +1,62 @@
+.upload-box {
+    border: 2px dashed #aaa; /* Dashed border for drop area */
+    border-radius: 10px; /* Rounded corners */
+    padding: 40px; /* Padding inside the box */
+    text-align: center; /* Center text alignment */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+    cursor: pointer; /* Pointer cursor */
+    position: relative;
+    background-color: #f9f9f9; /* Light background color */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+  }
+  
+  .upload-button {
+    width: 70%;
+  }
+
+  .upload-box.dragging {
+    background-color: #e0f7fa; /* Light blue background when dragging */
+    border-color: #039be5; /* Blue border when dragging */
+  }
+  
+  .upload-box .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Hide the input */
+    cursor: pointer;
+  }
+  
+  .upload-box p {
+    font-size: 18px; /* Larger font size */
+    color: #555; /* Grey text color */
+    margin: 0;
+  }
+  
+  .upload-box p span {
+    color: #039be5; /* Blue color for clickable text */
+    text-decoration: underline; /* Underline the clickable text */
+    cursor: pointer; /* Indicate it's clickable */
+  }
+  
+  .upload-box button {
+    margin-top: 20px; /* Space above the button */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size for button text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #039be5; /* Blue background color */
+    color: #fff; /* White text color */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  .upload-box button:hover {
+    background-color: #0288d1; /* Darker blue on hover */
+  }
+  

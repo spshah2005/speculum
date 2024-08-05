@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/Wardrobe.css";
 import Carousel from "../components/CenterMode"
+import WardrobeUpload from "../components/WardrobeUpload";
+
 const Wardrobe = () => {
   const [openSections, setOpenSections] = useState({
     Tops: false,
@@ -17,8 +19,13 @@ const Wardrobe = () => {
 
   return (
     <div className="wardrobe-container">
-      <div className="empty-section">
-        {/* Empty section for future use */}
+      <div className="wardrobe-modifier">
+        <div className="playground-container">
+          {/* drag and drop  */}
+        </div>
+        <div className="upload-container">
+          <WardrobeUpload/>
+        </div>
       </div>
       <div className="wardrobe">
         {["tops", "bottoms", "accessories"].map((section) => (

@@ -1,12 +1,11 @@
 import React from "react";
 import Slider from "react-slick";
 import "../styles/carousel.css";
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css';
 
 function CenterMode() {
   const settings = {
     className: "center",
+    draggable: false,
     centerMode: true,
     infinite: true,
     centerPadding: "60px",

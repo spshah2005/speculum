@@ -5,13 +5,24 @@
     min-height: 90vh;
   }
   
-  .empty-section {
+  .wardrobe-modifier {
+    width: 50%;
     flex: 1;
+    flex-direction:column;
     background-color: #f4f4f4;
     border-right: 2px solid #ddd;
   }
   
+  .playground-container {
+    height:70%
+  }
+
+  .upload-container {
+    height: 25%
+  } 
+
   .wardrobe {
+    width: 50%;
     flex: 1; /* Increase this value to make the wardrobe section larger */
     display: flex;
     flex-direction: column;
