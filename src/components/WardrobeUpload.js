@@ -26,14 +26,16 @@ function WardrobeUpload() {
     let imageUrl = ''
     
     //upload image to firestore storage
-    try { 
+    async function uploadToFireCloud() {
+      try { 
         await uploadBytes(storageRef, image);
         console.log('Image uploaded successfully!');
 
         imageUrl = await getDownloadURL(storageRef);
         console.log('Download URL:', imageUrl);
-    } catch (error) {
-        console.error('Error uploading image:', error);
+      } catch (error) {
+          console.error('Error uploading image:', error);
+      }
     }
 
     // gemini api model
@@ -52,16 +54,17 @@ function WardrobeUpload() {
     }
     
     // gemini prompt and JSON response
-    async function run() {
+    async function geminiClothesDescription() {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", generation_config:{"response_mime_type": "application/json"} });
     
         const prompt = `List the colors of the garment, 
-        and keywords describing the style of garment, 
+        and keywords describing the style of garment, and a title for the garment
         Use the following JSON schema and Provide your answer in JSON form. 
         Reply with only the answer in JSON form and include no other commentary::
         Color = str
         Style = str
-        return a list[ {colors:list[Color]}, {style:list[Style]} ]
+        Title = str
+        return a list[Title, {colors:list[Color]}, {style:list[Style]} ]
         `
     
         const imagePart = await fileToGenerativePart(image)
@@ -70,17 +73,27 @@ function WardrobeUpload() {
         return JSON.parse(response.text());
     }
     
-    const data = await run(); // data[0] is colors && data[1] is styles
-    console.log('colors', data[0])
-    console.log('styles', data[1])
-   
     // Save data to Firestore along with image URL
-    const db = firebase.firestore();
-    await db.collection('users').doc(currentUser).collection('wardrobe').add({
-        colors: data[0]['colors'],
-        styles: data[1]['style'],
+    async function addEntry(data) {
+      const db = firebase.firestore(); //modify to create new reference with new user
+      const docRef = db.collection('users').doc(currentUser.uid);
+      const userDoc = await docRef.get()
+      if (!userDoc.exists){
+        await docRef.set({})
+      }
+      const wardrobe = docRef.collection('wardrobe')
+      await wardrobe.add({
+        title: data[0],
+        colors: data[1]['colors'],
+        styles: data[2]['style'],
         imgUrl: imageUrl
-    })
+      })
+    }
+
+    uploadToFireCloud();
+    const data = await geminiClothesDescription(); // data[0] is colors && data[1] is styles
+    console.log(data)
+    addEntry(data);
   };
 
   return (

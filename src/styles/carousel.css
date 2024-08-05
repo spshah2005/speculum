@@ -1,0 +1,40 @@
+/* Set up the overall container for the slider */
+.slider-container {
+  margin: 0 auto;
+  width: 500px; /* Increased width for better visibility */
+  padding-top: 20px; /* Space above the carousel */
+  padding-bottom: 40px; /* Space below the carousel, for dots */
+  position: relative;
+}
+
+/* Style for the carousel arrows */
+.slider-container .slick-prev:before,
+.slider-container .slick-next:before {
+  color: black;
+  font-size: 20px; /* Make the arrows more noticeable */
+}
+
+
+/* Centering the items */
+.slick-center h3 {
+  transform: scale(1.5); /* Scale the centered item */
+  transition: transform 0.8s; /* Smooth transition for scaling */
+}
+
+
+/* Background for individual slides */
+.slick-slide {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+  display: flex; /* Enable Flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+/* Additional styling for slide content */
+.slider-container .slick-slide h3 {
+  font-size: 20px; /* Size of the slide text */
+  color: #333; /* Color of the text */
+  text-align: center; /* Center align the text */
+  margin: 0;
+  padding: 10px 0;
+}
