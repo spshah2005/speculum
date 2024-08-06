@@ -21,6 +21,12 @@
   transition: transform 0.8s; /* Smooth transition for scaling */
 }
 
+/* Centering the items */
+.slick-center img {
+  transform: scale(1.5); /* Scale the centered item */
+  transition: transform 0.8s; /* Smooth transition for scaling */
+}
+
 
 /* Background for individual slides */
 .slick-slide {
@@ -31,8 +37,8 @@
 }
 
 /* Additional styling for slide content */
-.slider-container .slick-slide h3 {
-  font-size: 20px; /* Size of the slide text */
+.slider-container .slick-slide img {
+  object-fit: contain;
   color: #333; /* Color of the text */
   text-align: center; /* Center align the text */
   margin: 0;

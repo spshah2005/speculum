@@ -30,14 +30,15 @@
     padding: 20px;
     background-color: rgb(55, 54, 54);
     justify-content: center;
+
   }
   
   .wardrobe-section {
     width: 100%;
-    /* overflow: hidden; */
     transition: all 0.3s ease-in-out;
     margin-bottom: 10px;
     position: relative;
+    height:fit-content;
   }
   
   .wardrobe-section.closed .wardrobe-content {

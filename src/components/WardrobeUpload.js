@@ -101,9 +101,11 @@ function WardrobeUpload() {
     const data = await geminiClothesDescription();
     console.log(data);
     await addEntry(data);
+    setImage(null);
   };
 
   return (
+    <div className="upload-container">
     <div
       className={`upload-box ${isDragging ? 'dragging' : ''}`}
       onDragEnter={handleDragEnter}
@@ -118,8 +120,10 @@ function WardrobeUpload() {
       />
       <FontAwesomeIcon icon={faCamera} size="3x" className="upload-icon" />
       {image && <p>{image.name}</p>}
-      <button className="upload-button" onClick={handleUpload}>upload</button>
     </div>
+    <button className="upload-button" onClick={handleUpload}>upload</button>
+    </div>
+    
   );
 }
 
