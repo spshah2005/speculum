@@ -48,7 +48,7 @@
   }
   
   .wardrobe-section.open .wardrobe-content {
-    max-height: 200px;
+    max-height: 350px;
     opacity: 1;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }

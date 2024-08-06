@@ -11,3 +11,4 @@ bootstrap
 @fortawesome/react-fontawesome
 react-slick
 slick-carousel
+remove.bg
