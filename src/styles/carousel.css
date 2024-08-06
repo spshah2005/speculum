@@ -38,9 +38,10 @@
 
 /* Additional styling for slide content */
 .slider-container .slick-slide img {
-  object-fit: contain;
-  color: #333; /* Color of the text */
-  text-align: center; /* Center align the text */
-  margin: 0;
-  padding: 10px 0;
+  object-fit: contain; /* Ensures the image is contained within its container without distortion */
+  width: 100%; /* Makes the image take up the full width of its container */
+  height: 300px; /* Sets a fixed height for the image container */
+  display: block; /* Removes any default inline spacing around the images */
+  margin: 0 auto; /* Centers the image horizontally within its container */
+  padding: 10px 0; /* Optional: Adds padding above and below the image */
 }
