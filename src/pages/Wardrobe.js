@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Wardrobe.css";
-import Carousel from "../components/CenterMode"
+import Carousel from "../components/Carousel"
 import WardrobeUpload from "../components/WardrobeUpload";
+import Canvas from "../components/Canvas"
 
 //firebase
 import firebase from 'firebase/compat/app';
@@ -9,6 +10,7 @@ import 'firebase/compat/firestore';
 
 //auth
 import { useAuth } from "../context/AuthContext"
+
 
 const Wardrobe = () => {
   const [openSections, setOpenSections] = useState({
@@ -84,16 +86,31 @@ const Wardrobe = () => {
     }));
   };
 
+  const [droppedItems, setDroppedItems] = useState([]);
+  const handleDragStart = (e,item) => {
+    console.log('dragging')
+    e.dataTransfer.setData('item', JSON.stringify(item));
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const item = JSON.parse(e.dataTransfer.getData('item'));
+    setDroppedItems([...droppedItems, item]);
+  };
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+  
   return (
     <div className="wardrobe-container">
       <div className="wardrobe-modifier">
-        <div className="playground-container">
-          {/* drag and drop  */}
+        <div className="wardrobe-playground">
+          <Canvas droppedItems={droppedItems} onDrop={handleDrop} onDragOver={handleDragOver} />
         </div>
         <div className="upload-container">
           <WardrobeUpload/>
         </div>
       </div>
+
       <div className="wardrobe">
         {["tops", "bottoms", "accessories"].map((section) => (
           <div
@@ -106,13 +123,14 @@ const Wardrobe = () => {
               {openSections[section] ? "close" : `${section}`}
             </button>
             <div className="wardrobe-content">
-              {section==="tops" && <Carousel content={tops}/>}
-              {section==="bottoms" && <Carousel content={bottoms}/>}
-              {section==="accessories" && <Carousel content={accessories}/>}
+              {section==="tops" && <Carousel content={tops} onDragStart={handleDragStart}/>}
+              {section==="bottoms" && <Carousel content={bottoms} onDragStart={handleDragStart}/>}
+              {section==="accessories" && <Carousel content={accessories} onDragStart={handleDragStart}/>}
             </div>
           </div>
         ))}
       </div>
+
     </div>
   );
 };

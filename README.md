@@ -12,3 +12,5 @@ bootstrap
 react-slick
 slick-carousel
 remove.bg
+react-dnd
+react-dnd-html5-backend

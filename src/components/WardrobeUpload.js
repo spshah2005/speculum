@@ -136,7 +136,6 @@ function WardrobeUpload() {
 
   return (
     <div className="upload-container" id = 'upload-container'> 
-      {image && <img src={image.src} alt='removed back'/>}
     <div
       className={`upload-box ${isDragging ? 'dragging' : ''}`}
       onDragEnter={handleDragEnter}

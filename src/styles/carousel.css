@@ -1,7 +1,7 @@
 /* Set up the overall container for the slider */
 .slider-container {
   margin: 0 auto;
-  width: 500px; /* Increased width for better visibility */
+  width: 80%; /* Increased width for better visibility */
   padding-top: 20px; /* Space above the carousel */
   padding-bottom: 40px; /* Space below the carousel, for dots */
   position: relative;
@@ -16,16 +16,17 @@
 
 
 /* Centering the items */
-.slick-center h3 {
-  transform: scale(1.5); /* Scale the centered item */
-  transition: transform 0.8s; /* Smooth transition for scaling */
-}
+
+/* .slick-center h3 {
+  transform: scale(1.5); 
+  transition: transform 0.8s;
+} */
 
 /* Centering the items */
-.slick-center img {
-  transform: scale(1.5); /* Scale the centered item */
-  transition: transform 0.8s; /* Smooth transition for scaling */
-}
+/* .slick-center img {
+  transform: scale(1.3); 
+  transition: transform 0.8s; 
+} */
 
 
 /* Background for individual slides */
@@ -34,6 +35,15 @@
   display: flex; /* Enable Flexbox */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex;
+  align-items: center;
 }
 
 /* Additional styling for slide content */
