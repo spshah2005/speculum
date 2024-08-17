@@ -1,6 +1,7 @@
 import React from 'react';
 
 const CarouselItem = ({ draggable, onDragStart, displayUrl }) => {
+
   return (
     <div
       draggable={draggable}

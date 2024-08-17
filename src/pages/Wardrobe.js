@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Wardrobe.css";
+import "../styles/wardrobe.css";
 import Carousel from "../components/Carousel"
 import WardrobeUpload from "../components/WardrobeUpload";
 import Canvas from "../components/Canvas"
@@ -26,6 +26,7 @@ const Wardrobe = () => {
   const {currentUser} = useAuth()
 
   const addTop = (key, item) => {
+    Object.defineProperty(item, "key", {value:key})
     setTops((prevTops) => {
       const newTops = new Map(prevTops);
       newTops.set(key, item);
@@ -34,6 +35,7 @@ const Wardrobe = () => {
   };
 
   const addBottom = (key, item) => {
+    Object.defineProperty(item, "key", {value:key})
     setBottoms((prevBottoms) => {
       const newBottoms = new Map(prevBottoms);
       newBottoms.set(key, item);
@@ -42,6 +44,7 @@ const Wardrobe = () => {
   };
 
   const addAccessory = (key, item) => {
+    Object.defineProperty(item, "key", {value:key})
     setAccessories((prevAccessories) => {
       const newAccessories = new Map(prevAccessories);
       newAccessories.set(key, item);
@@ -87,17 +90,25 @@ const Wardrobe = () => {
   };
 
   const [droppedItems, setDroppedItems] = useState([]);
+  
   const handleDragStart = (e,item) => {
-    console.log('dragging')
     e.dataTransfer.setData('item', JSON.stringify(item));
+    console.log(item)
   };
   const handleDrop = (e) => {
     e.preventDefault();
-    const item = JSON.parse(e.dataTransfer.getData('item'));
+    const item = JSON.parse(e.dataTransfer.getData('item'));  
+    console.log('hi'); 
+    const canvasRect = e.target.getBoundingClientRect();
+    const x = e.clientX - canvasRect.left;
+    const y = e.clientY - canvasRect.top;
+    item.x = x
+    item.y = y
     setDroppedItems([...droppedItems, item]);
   };
   const handleDragOver = (e) => {
     e.preventDefault();
+    
   };
   
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/UploadBox.css'; // Assuming your CSS file is named UploadBox.css
+import '../styles/upload-box.css'; // Assuming your CSS file is named UploadBox.css
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
