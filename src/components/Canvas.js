@@ -24,7 +24,7 @@ export default function Canvas({droppedItems, onDrop, onDragOver}) {
                 left: `${item.x}px`,
                 top: `${item.y}px`
             }}>
-            <img style={{ width: "100px", height: "100px" }} src={item.imgUrl} alt={`Item ${index}`} />
+            <img style={{ width: "100px", height: "auto", objectFit:"contain" }} src={item.imgUrl} alt={`Item ${index}`} />
             </div>
         ))}
         </div>

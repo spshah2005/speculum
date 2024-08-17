@@ -100,8 +100,8 @@ const Wardrobe = () => {
     const item = JSON.parse(e.dataTransfer.getData('item'));  
     console.log('hi'); 
     const canvasRect = e.target.getBoundingClientRect();
-    const x = e.clientX - canvasRect.left;
-    const y = e.clientY - canvasRect.top;
+    const x = e.clientX - canvasRect.left-50;
+    const y = e.clientY - canvasRect.top-50;
     item.x = x
     item.y = y
     setDroppedItems([...droppedItems, item]);
