@@ -1,0 +1,11 @@
+.canvas-item:hover {
+    border: 2px dashed black;
+    cursor: grab;
+}
+
+.canvas {
+    height: 100%;
+    margin: 5px;
+    border: 15px solid rgb(50, 48, 48);
+    position: 'relative'
+}

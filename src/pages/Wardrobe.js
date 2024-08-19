@@ -3,6 +3,7 @@ import "../styles/wardrobe.css";
 import Carousel from "../components/Carousel"
 import WardrobeUpload from "../components/WardrobeUpload";
 import Canvas from "../components/Canvas"
+import TrashBin from "../components/TrashBin"
 
 //firebase
 import firebase from 'firebase/compat/app';
@@ -91,6 +92,11 @@ const Wardrobe = () => {
 
   const [droppedItems, setDroppedItems] = useState([]);
   
+  const deleteDroppedItem = (targetIndex) => {
+    const newDroppedItems = droppedItems.filter(item => item.id !== targetIndex);
+    setDroppedItems(newDroppedItems); 
+  };
+
   const handleDragStart = (e,item) => {
     e.dataTransfer.setData('item', JSON.stringify(item));
     console.log(item)
@@ -98,13 +104,23 @@ const Wardrobe = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     const item = JSON.parse(e.dataTransfer.getData('item'));  
-    console.log('hi'); 
     const canvasRect = e.target.getBoundingClientRect();
     const x = e.clientX - canvasRect.left-50;
     const y = e.clientY - canvasRect.top-50;
-    item.x = x
-    item.y = y
-    setDroppedItems([...droppedItems, item]);
+    if (!("x"  in item)) {
+      item.x = x;
+      item.y = y;
+      item.id = droppedItems.length;
+      setDroppedItems([...droppedItems, item]);
+    }
+    else {
+      const existingId = droppedItems.findIndex(droppedItem => droppedItem.id===item.id);
+      deleteDroppedItem(existingId)
+      item.x = x;
+      item.y = y;
+      setDroppedItems([...droppedItems, item])
+      console.log(droppedItems);
+    }
   };
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -115,15 +131,18 @@ const Wardrobe = () => {
     <div className="wardrobe-container">
       <div className="wardrobe-modifier">
         <div className="wardrobe-playground">
-          <Canvas droppedItems={droppedItems} onDrop={handleDrop} onDragOver={handleDragOver} />
+          <Canvas droppedItems={droppedItems} onDrop={handleDrop} onDragStart={handleDragStart} onDragOver={handleDragOver} />
         </div>
-        <div className="upload-container">
-          <WardrobeUpload/>
+        <div className="menu-container">
+          <WardrobeUpload />
+          <div className="trash-container">
+            <TrashBin />
+          </div>
         </div>
       </div>
 
       <div className="wardrobe">
-        {["tops", "bottoms", "accessories"].map((section) => (
+        {["tops", "bottoms", "dresses", "accessories"].map((section) => (
           <div
             key={section}
             className={`wardrobe-section ${

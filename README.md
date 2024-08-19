@@ -19,3 +19,4 @@ remove.bg
 react-dnd
 react-dnd-html5-backend
 immutability-helper
+react-icons
