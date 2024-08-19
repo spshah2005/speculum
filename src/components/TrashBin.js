@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import openTrash from '../images/open-trash.png'
 import closedTrash from '../images/closed-trash.png'
 
-export default function TrashBin(){
+export default function TrashBin({onDrop}){
     const [isOpen, setIsOpen] = useState(false);
 
     const handleDragOver = (e) => {
@@ -19,13 +19,13 @@ export default function TrashBin(){
         setIsOpen(!isOpen);
     };
 
-    const handleOnDrop = (e) => {
-        e.preventDefault();
+    const handleDrop = (e) => {
+        onDrop(e);
         setIsOpen(false);
     }
 
     return (
-        <div onClick={toggleIcon} onDrop={handleOnDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}>
+        <div onClick={toggleIcon} onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}>
         {isOpen ? (
             <img className="trash-icon" style={{width:"95%", height:"95%", objectFit:"contain"}}
             src={openTrash} alt="Open Trash" />

@@ -91,37 +91,39 @@ const Wardrobe = () => {
   };
 
   const [droppedItems, setDroppedItems] = useState([]);
-  
-  const deleteDroppedItem = (targetIndex) => {
-    const newDroppedItems = droppedItems.filter(item => item.id !== targetIndex);
-    setDroppedItems(newDroppedItems); 
-  };
 
   const handleDragStart = (e,item) => {
     e.dataTransfer.setData('item', JSON.stringify(item));
-    console.log(item)
   };
   const handleDrop = (e) => {
-    e.preventDefault();
-    const item = JSON.parse(e.dataTransfer.getData('item'));  
-    const canvasRect = e.target.getBoundingClientRect();
-    const x = e.clientX - canvasRect.left-50;
-    const y = e.clientY - canvasRect.top-50;
-    if (!("x"  in item)) {
-      item.x = x;
-      item.y = y;
-      item.id = droppedItems.length;
-      setDroppedItems([...droppedItems, item]);
-    }
-    else {
-      const existingId = droppedItems.findIndex(droppedItem => droppedItem.id===item.id);
-      deleteDroppedItem(existingId)
-      item.x = x;
-      item.y = y;
-      setDroppedItems([...droppedItems, item])
-      console.log(droppedItems);
-    }
+      e.preventDefault();
+      const item = JSON.parse(e.dataTransfer.getData('item'));  
+      const canvasRect = e.target.getBoundingClientRect();
+      const x = e.clientX - canvasRect.left - 50;
+      const y = e.clientY - canvasRect.top - 50;
+
+      if (!("x" in item)) {
+          // New item, add to the array
+          item.x = x;
+          item.y = y;
+          item.id = droppedItems.length;
+          setDroppedItems([...droppedItems, item]);
+      } else {
+          // Existing item, remove the old one and add the updated one
+          const updatedItems = droppedItems.map(droppedItem => 
+              droppedItem.id === item.id ? { ...droppedItem, x, y } : droppedItem
+          );
+          setDroppedItems(updatedItems);
+      }
   };
+
+  const handleDropTrash = (e) => {
+    e.preventDefault();
+    const item = JSON.parse(e.dataTransfer.getData('item'));
+    const updatedItems = droppedItems.filter(droppedItem => droppedItem.id !== item.id);
+    setDroppedItems(updatedItems);
+  }
+
   const handleDragOver = (e) => {
     e.preventDefault();
     
@@ -136,7 +138,7 @@ const Wardrobe = () => {
         <div className="menu-container">
           <WardrobeUpload />
           <div className="trash-container">
-            <TrashBin />
+            <TrashBin onDrop={handleDropTrash}/>
           </div>
         </div>
       </div>
