@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./styles/wardrobe.css";
 import Carousel from "../components/Carousel"
 import WardrobeUpload from "../components/WardrobeUpload";
 import Canvas from "../components/Canvas"
