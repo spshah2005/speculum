@@ -15,9 +15,10 @@ import { useAuth } from "../context/AuthContext"
 
 const Wardrobe = () => {
   const [openSections, setOpenSections] = useState({
-    Tops: false,
-    Bottoms: false,
-    Accessories: false,
+    tops: false,
+    bottoms: false,
+    dresses: false,
+    accessories: false,
   });
 
   const [tops, setTops] = useState(new Map());
@@ -157,6 +158,7 @@ const Wardrobe = () => {
             <div className="wardrobe-content">
               {section==="tops" && <Carousel content={tops} onDragStart={handleDragStart}/>}
               {section==="bottoms" && <Carousel content={bottoms} onDragStart={handleDragStart}/>}
+              {section==="dresses" && <Carousel content={new Map()} onDragStart={handleDragStart}/>}
               {section==="accessories" && <Carousel content={accessories} onDragStart={handleDragStart}/>}
             </div>
           </div>
