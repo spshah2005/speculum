@@ -1,5 +1,8 @@
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
+/* slick-carousel CSS imports moved to src/index.js to avoid unresolved-tilde
+  issues with Create React App/PostCSS. Import the library CSS in JS like:
+  import 'slick-carousel/slick/slick.css';
+  import 'slick-carousel/slick/slick-theme.css';
+*/
 
 body {
   margin: 0;

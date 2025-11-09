@@ -7,5 +7,7 @@
     height: 100%;
     margin: 5px;
     border: 15px solid rgb(50, 48, 48);
-    position: 'relative'
+    position: relative;
+    min-height: 420px; /* ensure a reasonable drop area */
+    overflow: hidden;
 }

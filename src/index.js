@@ -4,6 +4,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+/* Import third-party CSS here (JS imports resolve node_modules paths reliably).
+  This avoids the tilde (~) notation inside CSS which can be unresolved by CRA/PostCSS. */
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import './index.css'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

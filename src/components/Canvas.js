@@ -6,28 +6,30 @@ import { useDrop } from 'react-dnd'
 //styles
 import "../styles/canvas.css"
 
-export default function Canvas({droppedItems, onDragStart, onDrop, onDragOver}) {
+export default function Canvas({droppedItems, onDragStart, onDrop, onDragOver, canvasRef}) {
 
+    // snap to a 32px grid (optional, keeps drops aligned)
     function doSnapToGrid(x, y) {
-        const snappedX = Math.round(x / 32) * 32
-        const snappedY = Math.round(y / 32) * 32
+        const grid = 32
+        const snappedX = Math.round(x / grid) * grid
+        const snappedY = Math.round(y / grid) * grid
         return [snappedX, snappedY]
     }
 
     return (
-        <div className="canvas" onDrop={onDrop}  onDragOver={onDragOver}
-        >
+        <div className="canvas" ref={canvasRef} onDrop={onDrop} onDragOver={onDragOver}>
         {droppedItems.map((item, index) => (
             <div 
-            key={index} 
+            key={item.id ?? index} 
             className="canvas-item" 
+            draggable={true}
             onDragStart={(e) => onDragStart(e, item)} 
             style={{
                 position: 'absolute',
                 left: `${item.x}px`,
                 top: `${item.y}px`
             }}>
-            <img style={{ width: "100px", height: "auto", objectFit:"contain" }} src={item.imgUrl} alt={`Item ${index}`} />
+            <img style={{ width: "100px", height: "auto", objectFit:"contain", pointerEvents: 'none' }} src={item.imgUrl} alt={`Item ${index}`} />
             </div>
         ))}
         </div>

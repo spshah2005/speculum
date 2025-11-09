@@ -6,10 +6,11 @@ import 'firebase/compat/firestore';
 import { useAuth } from "../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// Removed Gemini import
 
 
 function WardrobeUpload() {
+  const [clothingType, setClothingType] = useState('top');
   const [image, setImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const storage = getStorage();
@@ -71,62 +72,21 @@ function WardrobeUpload() {
       // Get the download URL of the uploaded image
       imageUrl = await getDownloadURL(storageRef);
 
-      // Google Generative AI model
-      const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
-
-      async function fileToGenerativePart(file) {
-        const base64EncodedDataPromise = new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result.split(',')[1]);
-          reader.readAsDataURL(file);
-        });
-        return {
-          inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
-        };
+      // Save entry using user-selected clothing type
+      const db = firebase.firestore();
+      const docRef = db.collection('users').doc(currentUser.uid);
+      const userDoc = await docRef.get();
+      if (!userDoc.exists) {
+        await docRef.set({});
       }
-
-      async function geminiClothesDescription() {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", generation_config: {"response_mime_type": "application/json"} });
-
-        const prompt = `List the colors of the garment, 
-        and keywords describing the style of garment, and a title for the garment,
-        and classify the top as one of the following: top, bottom, accessory
-        Use the following JSON schema and Provide your answer in JSON form. 
-        Reply with only the answer in JSON form and include no other commentary::
-        Color = str
-        Style = str
-        Title = str
-        Type = str
-        return a list[Title, Type, {colors:list[Color]}, {style:list[Style]} ]
-        `;
-
-        const imagePart = await fileToGenerativePart(image);
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = await result.response;
-        return JSON.parse(response.text());
-      }
-
-      async function addEntry(data) {
-        const db = firebase.firestore();
-        const docRef = db.collection('users').doc(currentUser.uid);
-        const userDoc = await docRef.get();
-        if (!userDoc.exists) {
-          await docRef.set({});
-        }
-        const wardrobe = docRef.collection('wardrobe');
-        await wardrobe.add({
-          title: data[0],
-          type: data[1],
-          colors: data[2]['colors'],
-          styles: data[3]['style'],
-          imgUrl: imageUrl
-        });
-      }
-
-      // Process and save data
-      const data = await geminiClothesDescription();
-      console.log(data); //TO DO try again until valid JSON.parse
-      await addEntry(data);
+      const wardrobe = docRef.collection('wardrobe');
+      await wardrobe.add({
+        title: image.name,
+        type: clothingType,
+        colors: [],
+        styles: [],
+        imgUrl: imageUrl
+      });
     } catch (error) {
       console.error('Error handling upload:', error);
     } finally {
@@ -135,26 +95,39 @@ function WardrobeUpload() {
   };
 
   return (
-    <div className="upload-container" id = 'upload-container'> 
-    <div
-      className={`upload-box ${isDragging ? 'dragging' : ''}`}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={handleDrop}
-    >
-      <input
-        type="file"
-        className="file-input"
-        accept=".jpg, .jpeg"
-        onChange={handleImageChange}
-      />
-      <FontAwesomeIcon icon={faCamera} size="3x" className="upload-icon" />
-      {image && <p>{image.name}</p>}
+    <div className="upload-container" id='upload-container'>
+      <div
+        className={`upload-box ${isDragging ? 'dragging' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          className="file-input"
+          accept=".jpg, .jpeg"
+          onChange={handleImageChange}
+        />
+        <FontAwesomeIcon icon={faCamera} size="3x" className="upload-icon" />
+        {image && <p>{image.name}</p>}
+      </div>
+      <div style={{ margin: '10px 0' }}>
+        <label htmlFor="clothing-type-select">Type:</label>
+        <select
+          id="clothing-type-select"
+          value={clothingType}
+          onChange={e => setClothingType(e.target.value)}
+          style={{ marginLeft: '8px', padding: '4px' }}
+        >
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+          <option value="dress">Dress</option>
+          <option value="accessory">Accessory</option>
+        </select>
+      </div>
+      <button className="upload-button" onClick={handleUpload}>Upload</button>
     </div>
-    <button className="upload-button" onClick={handleUpload}>upload</button>
-    </div>
-    
   );
 }
 

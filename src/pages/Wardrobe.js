@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Carousel from "../components/Carousel"
 import WardrobeUpload from "../components/WardrobeUpload";
 import Canvas from "../components/Canvas"
@@ -23,6 +23,7 @@ const Wardrobe = () => {
   const [tops, setTops] = useState(new Map());
   const [bottoms, setBottoms] = useState(new Map());
   const [accessories, setAccessories] = useState(new Map());
+  const [dresses, setDresses] = useState(new Map());
 
   const {currentUser} = useAuth()
 
@@ -53,6 +54,15 @@ const Wardrobe = () => {
     });
   };
 
+  const addDress = (key, item) => {
+    Object.defineProperty(item, "key", {value:key})
+    setDresses((prevDresses) => {
+      const newDresses = new Map(prevDresses);
+      newDresses.set(key, item);
+      return newDresses;
+    });
+  };
+
   useEffect(() => {
     const db = firebase.firestore();
     const docRef = db.collection('users').doc(currentUser.uid)
@@ -74,6 +84,9 @@ const Wardrobe = () => {
             else if (userData.type.toLowerCase() === "accessory"){
               addAccessory(doc.id, {colors:userData.colors, styles:userData.styles, title:userData.title, imgUrl:userData.imgUrl})
             }
+            else if (userData.type.toLowerCase() === "dress"){
+              addDress(doc.id, {colors:userData.colors, styles:userData.styles, title:userData.title, imgUrl:userData.imgUrl})
+            }
         });
       })
       .catch(error => {
@@ -92,29 +105,66 @@ const Wardrobe = () => {
 
   const [droppedItems, setDroppedItems] = useState([]);
 
-  const handleDragStart = (e,item) => {
-    e.dataTransfer.setData('item', JSON.stringify(item));
-  };
-  const handleDrop = (e) => {
-      e.preventDefault();
-      const item = JSON.parse(e.dataTransfer.getData('item'));  
-      const canvasRect = e.target.getBoundingClientRect();
-      const x = e.clientX - canvasRect.left - 50;
-      const y = e.clientY - canvasRect.top - 50;
+  const canvasRef = useRef(null);
 
-      if (!("x" in item)) {
-          // New item, add to the array
-          item.x = x;
-          item.y = y;
-          item.id = droppedItems.length;
-          setDroppedItems([...droppedItems, item]);
+  const handleDragStart = (e, item) => {
+    // compute pointer offset inside the dragged element so drop keeps relative position
+    const target = e.target;
+    const rect = target.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    const transferItem = { ...item, offsetX, offsetY };
+    e.dataTransfer.setData('item', JSON.stringify(transferItem));
+
+    // Optionally set drag image to improve UX (use the node itself)
+    if (e.dataTransfer.setDragImage) {
+      // use the element's image if available, else the element
+      const img = target.querySelector('img');
+      if (img) {
+        e.dataTransfer.setDragImage(img, offsetX, offsetY);
       } else {
-          // Existing item, remove the old one and add the updated one
-          const updatedItems = droppedItems.map(droppedItem => 
-              droppedItem.id === item.id ? { ...droppedItem, x, y } : droppedItem
-          );
-          setDroppedItems(updatedItems);
+        e.dataTransfer.setDragImage(target, offsetX, offsetY);
       }
+    }
+  };
+  const snapToGrid = (x, y, grid = 32) => {
+  const snappedX = Math.round(x / grid) * grid;
+  const snappedY = Math.round(y / grid) * grid;
+  return [snappedX, snappedY];
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+
+    const raw = e.dataTransfer.getData('item');
+    if (!raw) return;
+    const item = JSON.parse(raw);
+
+    // Use the canvas's bounding rect so we always calculate coordinates relative to the canvas
+    const canvasEl = canvasRef.current;
+    const canvasRect = canvasEl ? canvasEl.getBoundingClientRect() : { left: 0, top: 0 };
+
+    const offsetX = item.offsetX ?? 50;
+    const offsetY = item.offsetY ?? 50;
+
+    let x = e.clientX - canvasRect.left - offsetX;
+    let y = e.clientY - canvasRect.top - offsetY;
+
+    // snap to grid for tidiness
+    [x, y] = snapToGrid(x, y, 32);
+
+    if (!('x' in item)) {
+      // New item, add to the array
+      const newItem = { ...item, x, y, id: droppedItems.length };
+      setDroppedItems(prev => [...prev, newItem]);
+    } else {
+      // Existing item, update position
+      const updatedItems = droppedItems.map(droppedItem => 
+        droppedItem.id === item.id ? { ...droppedItem, x, y } : droppedItem
+      );
+      setDroppedItems(updatedItems);
+    }
   };
 
   const handleDropTrash = (e) => {
@@ -131,9 +181,9 @@ const Wardrobe = () => {
   
   return (
     <div className="wardrobe-container">
-      <div className="wardrobe-modifier">
+        <div className="wardrobe-modifier">
         <div className="wardrobe-playground">
-          <Canvas droppedItems={droppedItems} onDrop={handleDrop} onDragStart={handleDragStart} onDragOver={handleDragOver} />
+          <Canvas canvasRef={canvasRef} droppedItems={droppedItems} onDrop={handleDrop} onDragStart={handleDragStart} onDragOver={handleDragOver} />
         </div>
         <div className="menu-container">
           <WardrobeUpload />
@@ -157,7 +207,7 @@ const Wardrobe = () => {
             <div className="wardrobe-content">
               {section==="tops" && <Carousel content={tops} onDragStart={handleDragStart}/>}
               {section==="bottoms" && <Carousel content={bottoms} onDragStart={handleDragStart}/>}
-              {section==="dresses" && <Carousel content={new Map()} onDragStart={handleDragStart}/>}
+              {section==="dresses" && <Carousel content={dresses} onDragStart={handleDragStart}/>}
               {section==="accessories" && <Carousel content={accessories} onDragStart={handleDragStart}/>}
             </div>
           </div>
