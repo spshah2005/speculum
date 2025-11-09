@@ -7,7 +7,7 @@ import Shop from "./pages/Shop"
 import SignUp from "./pages/SignUp"
 import LogIn from "./pages/LogIn"
 import Wardrobe from "./pages/Wardrobe"
-
+import OutfitLibrary from "./pages/OutfitLibrary"
 //components
 import AppNav from "./components/AppNav"
 import WardrobeUpload from "./components/WardrobeUpload"
@@ -39,6 +39,7 @@ function App() {
           <Route path="/shop" element={<Shop/>} />
           <Route path="/log-in" element={<LogIn/>} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/outfits" element={<OutfitLibrary />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -4,6 +4,7 @@ import WardrobeUpload from "../components/WardrobeUpload";
 import Canvas from "../components/Canvas"
 import TrashBin from "../components/TrashBin"
 
+// Outfit Library UI
 //firebase
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -104,6 +105,39 @@ const Wardrobe = () => {
   };
 
   const [droppedItems, setDroppedItems] = useState([]);
+  const [saveStatus, setSaveStatus] = useState('');
+  const [outfitName, setOutfitName] = useState('');
+  // Save outfit to Firestore
+  const handleSaveOutfit = async () => {
+    if (droppedItems.length === 0) {
+      setSaveStatus('No items on canvas to save.');
+      return;
+    }
+    if (!outfitName.trim()) {
+      setSaveStatus('Please enter a name for your outfit.');
+      return;
+    }
+    try {
+      const db = firebase.firestore();
+      const docRef = db.collection('users').doc(currentUser.uid);
+      const userDoc = await docRef.get();
+      if (!userDoc.exists) {
+        await docRef.set({});
+      }
+      const outfits = docRef.collection('outfits');
+      // Save with timestamp, items, and name
+      await outfits.add({
+        createdAt: new Date(),
+        items: droppedItems,
+        name: outfitName.trim(),
+      });
+      setSaveStatus('Outfit saved!');
+      setOutfitName('');
+    } catch (error) {
+      setSaveStatus('Error saving outfit.');
+      console.error('Error saving outfit:', error);
+    }
+  };
 
   const canvasRef = useRef(null);
 
@@ -182,15 +216,33 @@ const Wardrobe = () => {
   return (
     <div className="wardrobe-container">
         <div className="wardrobe-modifier">
-        <div className="wardrobe-playground">
-          <Canvas canvasRef={canvasRef} droppedItems={droppedItems} onDrop={handleDrop} onDragStart={handleDragStart} onDragOver={handleDragOver} />
-        </div>
-        <div className="menu-container">
-          <WardrobeUpload />
-          <div className="trash-container">
-            <TrashBin onDrop={handleDropTrash}/>
+          <div className="wardrobe-playground">
+            <Canvas canvasRef={canvasRef} droppedItems={droppedItems} onDrop={handleDrop} onDragStart={handleDragStart} onDragOver={handleDragOver} />
+            {saveStatus && <div style={{marginTop: '8px', color: saveStatus.includes('Error') ? 'red' : 'green'}}>{saveStatus}</div>}
           </div>
-        </div>
+          <div className="menu-container" style={{display: 'flex', flexDirection: 'row', gap: '32px', justifyContent: 'center', marginTop: '32px'}}>
+            {/* Left column: Save + Upload */}
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '16px', minWidth: '260px', width: '100%'}}>
+              <input
+                type="text"
+                value={outfitName}
+                onChange={e => setOutfitName(e.target.value)}
+                placeholder="Outfit Name"
+                style={{marginBottom: '8px', width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '1em'}}
+              />
+              <button className="upload-button" style={{marginBottom: '8px', width: '100%'}} onClick={handleSaveOutfit}>Save Outfit</button>
+              <div style={{width: '100%'}}>
+                <WardrobeUpload />
+              </div>
+            </div>
+            {/* Right column: View + Trash */}
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '16px', minWidth: '260px', width: '100%'}}>
+              <a href="/outfits" className="upload-button" style={{marginBottom: '8px', width: '100%', textAlign: 'center', textDecoration: 'none', lineHeight: '32px'}}>View Saved Outfits</a>
+              <div className="trash-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%'}}>
+                <TrashBin onDrop={handleDropTrash} style={{width: '120px', height: '120px'}} />
+              </div>
+            </div>
+          </div>
       </div>
 
       <div className="wardrobe">
